@@ -66,5 +66,27 @@ function pauseMusic() {
 }
 </script>
 
+<script>
+let music = document.getElementById("music");
+
+function playMusic() {
+    music.play();
+}
+
+function pauseMusic() {
+    music.pause();
+}
+
+// ✅ FETCH POEM (THIS WAS MISSING)
+fetch("poem.txt")
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById("poem").textContent = data;
+    })
+    .catch(error => {
+        document.getElementById("poem").textContent = "Error loading poem";
+    });
+</script>
+
 </body>
 </html>
