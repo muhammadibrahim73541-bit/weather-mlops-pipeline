@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather AI Dashboard</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: linear-gradient(to right, #141e30, #243b55);
+            color: white;
+            text-align: center;
+            padding: 40px;
+        }
+
+        h1 {
+            font-size: 40px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            margin: 20px auto;
+            width: 70%;
+            border-radius: 15px;
+        }
+
+        pre {
+            text-align: left;
+            white-space: pre-wrap;
+        }
+
+        button {
+            padding: 10px;
+            border-radius: 10px;
+            background: #00c6ff;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>🌍 Weather AI Dashboard</h1>
+
+<div class="card">
+    <h2>📜 Poems</h2>
+    <pre id="poem">Loading...</pre>
+</div>
+
+<button onclick="playMusic()">🎵 Play Music</button>
+
+<audio id="music" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
+</audio>
+
+<script>
+fetch("poem.txt")
+.then(r => r.text())
+.then(t => document.getElementById("poem").innerText = t);
+
+function playMusic() {
+    document.getElementById("music").play();
+}
+</script>
+
+</body>
+</html>
