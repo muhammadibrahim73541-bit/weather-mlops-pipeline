@@ -3,110 +3,113 @@
 <head>
     <title>Weather AI Dashboard</title>
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
             margin: 0;
-            background: #0f172a;
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at top, #1e293b, #020617);
             color: white;
         }
 
-        /* Navbar */
         .navbar {
             display: flex;
             justify-content: space-between;
             padding: 20px 40px;
             background: rgba(255,255,255,0.05);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
         }
 
         .navbar h1 {
-            font-size: 20px;
+            font-weight: 800;
         }
 
-        /* Layout */
         .container {
             padding: 40px;
         }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+        .search {
+            text-align: center;
+            margin-bottom: 30px;
         }
 
-        /* Cards */
-        .card {
-            background: rgba(255,255,255,0.05);
-            padding: 20px;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-            transition: 0.3s;
+        input {
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            width: 250px;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        /* Buttons */
         button {
-            padding: 10px 15px;
+            padding: 12px 15px;
             border-radius: 10px;
             border: none;
             background: linear-gradient(45deg, #00c6ff, #0072ff);
             color: white;
             cursor: pointer;
-            margin: 5px;
+            margin-left: 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            padding: 20px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.03);
+        }
+
+        .temp {
+            font-size: 30px;
+            font-weight: bold;
         }
 
         pre {
             white-space: pre-wrap;
         }
-
-        .controls {
-            margin-top: 10px;
-        }
-
     </style>
 </head>
 
 <body>
 
 <div class="navbar">
-    <h1>🌍 Weather AI</h1>
-    <p>Powered by MLOps ⚡</p>
+    <h1>🌍 Weather AI Dashboard</h1>
+    <p>Next-Gen MLOps UI ⚡</p>
 </div>
 
 <div class="container">
 
-    <div class="grid">
+    <!-- SEARCH -->
+    <div class="search">
+        <input id="cityInput" placeholder="Search city...">
+        <button onclick="getWeather()">Search</button>
+    </div>
 
-        <!-- WEATHER CARD -->
-        <div class="card">
-            <h2>🌤 Live Weather</h2>
-            <p>Check above widget 👆</p>
-        </div>
+    <!-- GRID -->
+    <div class="grid" id="weatherGrid"></div>
 
-        <!-- POEM CARD -->
-        <div class="card">
-            <h2>📜 AI Poem</h2>
-            <pre id="poem">Loading...</pre>
-        </div>
+    <!-- POEM -->
+    <div class="card">
+        <h2>📜 AI Poem</h2>
+        <pre id="poem">Loading...</pre>
+    </div>
 
-        <!-- MUSIC CARD -->
-        <div class="card">
-            <h2>🎵 Music</h2>
-
-            <div class="controls">
-                <button onclick="playMusic()">▶ Play</button>
-                <button onclick="pauseMusic()">⏸ Pause</button>
-            </div>
-        </div>
-
+    <!-- MUSIC -->
+    <div class="card">
+        <h2>🎵 Music</h2>
+        <button onclick="playMusic()">▶ Play</button>
+        <button onclick="pauseMusic()">⏸ Pause</button>
     </div>
 
 </div>
@@ -116,22 +119,48 @@
 </audio>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+const API_KEY = "bcd0a3981a274233fe9126263d1ea061"; // replace this
 
-    const music = document.getElementById("music");
+const cities = ["Aalborg", "Lahore", "Doha"];
 
-    window.playMusic = () => music.play();
-    window.pauseMusic = () => music.pause();
+function fetchWeather(city) {
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}`)
+    .then(res => res.json())
+    .then(data => {
+        const time = new Date().toLocaleTimeString();
 
-    fetch("poem.txt")
-        .then(res => res.text())
-        .then(data => {
-            document.getElementById("poem").textContent = data;
-        })
-        .catch(() => {
-            document.getElementById("poem").textContent = "Error loading poem";
-        });
+        const card = `
+            <div class="card">
+                <h2>${data.name}</h2>
+                <p class="temp">${data.main.temp}°C</p>
+                <p>${data.weather[0].description}</p>
+                <p>⏰ ${time}</p>
+            </div>
+        `;
 
+        document.getElementById("weatherGrid").innerHTML += card;
+    });
+}
+
+// Load default cities
+cities.forEach(city => fetchWeather(city));
+
+// Search city
+function getWeather() {
+    const city = document.getElementById("cityInput").value;
+    fetchWeather(city);
+}
+
+// Music
+const music = document.getElementById("music");
+function playMusic() { music.play(); }
+function pauseMusic() { music.pause(); }
+
+// Poem
+fetch("poem.txt")
+.then(res => res.text())
+.then(data => {
+    document.getElementById("poem").textContent = data;
 });
 </script>
 
