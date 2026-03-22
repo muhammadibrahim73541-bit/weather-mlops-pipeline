@@ -34,6 +34,7 @@
             background: #00c6ff;
             border: none;
             cursor: pointer;
+            margin: 5px;
         }
     </style>
 </head>
@@ -55,37 +56,30 @@
 </audio>
 
 <script>
-let music = document.getElementById("music");
+document.addEventListener("DOMContentLoaded", function () {
 
-function playMusic() {
-    music.play();
-}
+    // 🎵 Music Controls
+    const music = document.getElementById("music");
 
-function pauseMusic() {
-    music.pause();
-}
-</script>
+    window.playMusic = function () {
+        music.play();
+    }
 
-<script>
-let music = document.getElementById("music");
+    window.pauseMusic = function () {
+        music.pause();
+    }
 
-function playMusic() {
-    music.play();
-}
+    // 📜 Fetch Poem
+    fetch("poem.txt")
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById("poem").textContent = data;
+        })
+        .catch(error => {
+            document.getElementById("poem").textContent = "Error loading poem";
+        });
 
-function pauseMusic() {
-    music.pause();
-}
-
-// ✅ FETCH POEM (THIS WAS MISSING)
-fetch("poem.txt")
-    .then(response => response.text())
-    .then(data => {
-        document.getElementById("poem").textContent = data;
-    })
-    .catch(error => {
-        document.getElementById("poem").textContent = "Error loading poem";
-    });
+});
 </script>
 
 </body>
