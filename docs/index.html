@@ -47,19 +47,22 @@
     <pre id="poem">Loading...</pre>
 </div>
 
-<button onclick="playMusic()">🎵 Play Music</button>
+<button onclick="playMusic()">▶ Play</button>
+<button onclick="pauseMusic()">⏸ Pause</button>
 
 <audio id="music" loop>
     <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
 </audio>
 
 <script>
-fetch("poem.txt")
-.then(r => r.text())
-.then(t => document.getElementById("poem").innerText = t);
+let music = document.getElementById("music");
 
 function playMusic() {
-    document.getElementById("music").play();
+    music.play();
+}
+
+function pauseMusic() {
+    music.pause();
 }
 </script>
 
